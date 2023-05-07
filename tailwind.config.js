@@ -4,12 +4,21 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   important: "#root",
   theme: {
-    theme: {
-      extend: {
-        primary: "#243c5a",
+    extend: {
+      colors: {
+        primary: "#FAFAFA",
         secondary: {
-          100: "#243c5a",
+          100: "#AEAEAE",
+          200: "#D9D9D9",
+          300: "#E8EAEF",
+          400: "#F2F4F8",
         },
+        tertiary: {
+          100: "#260E0E",
+        },
+        success: "#2C9930",
+        error: "#FF4141",
+        warning: "#A19344",
       },
     },
   },
