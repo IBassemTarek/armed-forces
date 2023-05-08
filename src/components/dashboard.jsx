@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { SlArrowLeft } from "react-icons/sl";
 import { BiSearchAlt2 } from "react-icons/bi";
@@ -7,8 +7,33 @@ import { MdEditDocument } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
 
 import { Input } from "./input";
+import instance from "../utils/axios";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [ladingUserData, setLadingUserData] = useState(true);
+  const [loadingTable, setLoadingTable] = useState(true);
+  const [table, setTable] = useState([]);
+  const getUser = async () => {
+    const userData = await instance.get(`user/me/`);
+    setUser(userData.data);
+    setLadingUserData(false);
+  };
+
+  const getTable = async () => {
+    const tableData = await instance.get(`store/files/all/`);
+    setTable(tableData.data);
+    console.log(tableData.data);
+    setLoadingTable(false);
+  };
+  useEffect(() => {
+    getUser();
+    getTable();
+  }, []);
+
   return (
     <Fragment>
       <Helmet>
@@ -17,7 +42,13 @@ export const Dashboard = () => {
       <div className="flex justify-center items-center h-screen bg-primary px-9 py-9">
         <div className="bg-secondary-400 absolute top-0 md:top-[6%] rounded z-10 left-0 md:left-[4%]">
           <div className="flex justify-center items-center p-2">
-            <div className="bg-tertiary-100 h-8 w-8 rounded-full items-center flex justify-center">
+            <div
+              className="bg-tertiary-100 h-8 w-8 rounded-full items-center flex justify-center"
+              onClick={() => {
+                localStorage.removeItem("accessToken");
+                navigate("/login");
+              }}
+            >
               <SlArrowLeft color="white" size={14} />
             </div>
             <span className="text-black text-xs font-mono ml-3">
@@ -27,7 +58,7 @@ export const Dashboard = () => {
           <div>
             <div className="flex p-2 bg-secondary-300 rounded-br-md rounded-bl-md justify-center">
               <span className="text-black text-xs font-mono">
-                ج/أحمد السيد محمد
+                {ladingUserData ? "جاري التحميل" : user?.name}
               </span>
             </div>
           </div>
@@ -92,48 +123,61 @@ export const Dashboard = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="whitespace-nowrap text-sm px-4 py-2 border-r-2 border-dashed border-secondary-200 flex gap-2 ">
-                      <button
-                        type="submit"
-                        className="bg-error  px-2 py-1 rounded-md flex items-center bg-opacity-5"
-                      >
-                        <span className="font-sans text-error mr-1">حذف</span>
-                        <BsFillTrashFill className="text-error" />
-                      </button>
-                      <button
-                        type="submit"
-                        className="bg-warning  px-2 py-1 rounded-md flex items-center bg-opacity-5"
-                      >
-                        <span className="font-sans text-warning mr-1">
-                          تعديل
-                        </span>
-                        <MdEditDocument className="text-warning" />
-                      </button>
-                      <button
-                        type="submit"
-                        className="bg-success  px-2 py-1 rounded-md flex items-center bg-opacity-5"
-                      >
-                        <span className="font-sans text-success mr-1">
-                          ارسل للطباعة
-                        </span>
-                        <AiFillPrinter className="text-success" />
-                      </button>
-                    </td>
-                    <td className="whitespace-nowrap text-sm px-4 py-2">
-                      ج/ احمد السيد محمد
-                    </td>
-                    <td className="whitespace-nowrap text-sm px-4 py-2">
-                      الحاسب الالي الاداري _ 1
-                    </td>
-                    <td className="whitespace-nowrap text-sm px-4 py-2">
-                      16 / 03 / 2023
-                    </td>
-                    <td className="whitespace-nowrap text-sm px-4 py-2">
-                      الملف الاول للتجربة _ خاصة برنامج محرك البحث الاول _
-                      الاصدار الاول
-                    </td>
-                  </tr>
+                  {loadingTable ? (
+                    <tr>
+                      <td colSpan={5} className="text-center">
+                        <div className="flex justify-center items-center">
+                          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-secondary-200" />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    table.map((item, index) => (
+                      <tr>
+                        <td className="whitespace-nowrap text-sm px-4 py-2 border-r-2 border-dashed border-secondary-200 flex gap-2 ">
+                          <button
+                            type="submit"
+                            className="bg-error  px-2 py-1 rounded-md flex items-center bg-opacity-5"
+                          >
+                            <span className="font-sans text-error mr-1">
+                              حذف
+                            </span>
+                            <BsFillTrashFill className="text-error" />
+                          </button>
+                          <button
+                            type="submit"
+                            className="bg-warning  px-2 py-1 rounded-md flex items-center bg-opacity-5"
+                          >
+                            <span className="font-sans text-warning mr-1">
+                              تعديل
+                            </span>
+                            <MdEditDocument className="text-warning" />
+                          </button>
+                          <button
+                            type="submit"
+                            className="bg-success  px-2 py-1 rounded-md flex items-center bg-opacity-5"
+                          >
+                            <span className="font-sans text-success mr-1">
+                              ارسل للطباعة
+                            </span>
+                            <AiFillPrinter className="text-success" />
+                          </button>
+                        </td>
+                        <td className="whitespace-nowrap text-sm px-4 py-2">
+                          {item.author}
+                        </td>
+                        <td className="whitespace-nowrap text-sm px-4 py-2">
+                          {item.branch}
+                        </td>
+                        <td className="whitespace-nowrap text-sm px-4 py-2">
+                          {moment(item.updatedAt).utc().format("YYYY-MM-DD")}
+                        </td>
+                        <td className="whitespace-nowrap text-sm px-4 py-2">
+                          {item.title}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
               <div className="bg-secondary-200 w-full p-[0.5px] mt-1" />
