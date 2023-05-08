@@ -1,10 +1,10 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Input } from "../components/input";
 import { useNavigate } from "react-router-dom";
 import instance from "../utils/axios";
 import classNames from "classnames";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { MdOutlineClose } from "react-icons/md";
 import { HiLightningBolt } from "react-icons/hi";
 import styles from "./login.module.css";
@@ -15,19 +15,24 @@ function Login() {
   const [password, setPassword] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate("/dashboard");
+    }
+  }, []);
+
   const notify = () =>
     toast.custom(
       (t) => (
         <div
-          className={classNames([
-            styles.notificationWrapper,
-            t.visible ? "top-0" : "-top-96",
-          ])}
+          className={`flex flex-row items-center justify-between w-96 bg-error px-4 py-6 text-white shadow-2xl hover:shadow-none transform-gpu translate-y-0 hover:translate-y-1 rounded-xl relative transition-all duration-500 ease-in-out ${
+            t.visible ? "top-0" : "-top-96"
+          }`}
         >
-          <div className={styles.iconWrapper}>
+          <div className="text-xl">
             <HiLightningBolt />
           </div>
-          <div className={styles.contentWrapper}>
+          <div className="flex flex-col items-start justify-center ml-4 cursor-default">
             <h1>oops!</h1>
             <p>
               The email or password you entered is incorrect. Please try again.
@@ -43,7 +48,7 @@ function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!email || !password) {
+    if (!email || !password || email === "" || password === "") {
       notify();
       return;
     }
@@ -57,6 +62,7 @@ function Login() {
       setLoading(false);
       navigate("/dashboard");
     } catch (error) {
+      console.log(error);
       notify();
       setLoading(false);
     }

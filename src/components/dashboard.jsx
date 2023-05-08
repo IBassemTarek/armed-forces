@@ -39,7 +39,8 @@ export const Dashboard = () => {
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
-      <div className="flex justify-center items-center h-screen bg-primary px-9 py-9">
+      <div className="flex justify-center items-center h-screen bg-primary  py-9">
+        {/* LOGOUT TABAREA */}
         <div className="bg-secondary-400 absolute top-0 md:top-[6%] rounded z-10 left-0 md:left-[4%]">
           <div className="flex justify-center items-center p-2">
             <div
@@ -63,7 +64,10 @@ export const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* PAGE BODY */}
         <div className="p-5 bg-primary rounded-md w-full h-full relative py-6 xl:px-44">
+          {/* HEADER */}
           <div className="flex items-center justify-start md:flex-row-reverse flex-col md:mr-28">
             <div className="bg-secondary-200 w-32 h-32 rounded-full ml-5" />
             <div>
@@ -75,9 +79,11 @@ export const Dashboard = () => {
               </h2>
             </div>
           </div>
+
+          {/* TABLE AREA */}
           <div className="flex flex-col mt-5 bg-white rounded-md p-3">
-            <div className="flex gap-3">
-              <div className="flex-[7_7_0%] static">
+            <div className="flex gap-3 w-full justify-between">
+              <div className="w-[45%] static">
                 <Input
                   textRight={false}
                   placeholder={"الملف الأول للتجربه"}
@@ -93,7 +99,7 @@ export const Dashboard = () => {
                 />
               </div>
 
-              <div className="flex-[3_3_0%] bg-transparent border my-2 rounded-md border-secondary-400 pr-2">
+              <div className="w-[30%] bg-transparent border my-2 rounded-md border-secondary-400 pr-2">
                 <select
                   className="w-full h-full text-xs font-mono text-black text-center font-semibold"
                   prefix="filter"
@@ -105,14 +111,14 @@ export const Dashboard = () => {
                 </select>
               </div>
 
-              <div className="flex-1 flex bg-black justify-center items-center my-2 rounded-md">
+              <div className="w-[20%] flex bg-black justify-center items-center my-2 rounded-md">
                 <span className="text-white text-xs font-mono text-center font-semibold">
                   بحث
                 </span>
               </div>
             </div>
             <div className="overflow-auto flex flex-col">
-              <table className="table-auto w-full mt-3">
+              <table className="table-auto w-full mt-3 border-b-2 border-secondary-200">
                 <thead className="border-b-2 border-secondary-200">
                   <tr>
                     <th className="px-4 py-2 w-[30%]">العمليات</th>
@@ -180,21 +186,20 @@ export const Dashboard = () => {
                   )}
                 </tbody>
               </table>
-              <div className="bg-secondary-200 w-full p-[0.5px] mt-1" />
-              <div className=" w-[95%] flex mt-4 justify-between mx-2 px-8 items-center self-center">
-                <span className="text-xs text-black">
-                  CSE built with ❤️ by @ElsayedDev
+            </div>
+            <div className=" w-full flex flex-col-reverse gap-3 md:flex-row mt-4 justify-between mx-2 px-lg-8 items-center self-center">
+              <span className="text-xs text-black">
+                CSE built with ❤️ by @ElsayedDev
+              </span>
+              <button
+                type="button"
+                className="bg-black  px-2 py-1 rounded-md flex items-center whitespace-nowrap"
+              >
+                <span className="font-bold font-sans text-white mr-2">
+                  انشاء ملف جديد
                 </span>
-                <button
-                  type="submit"
-                  className="bg-black  px-2 py-1 rounded-md flex items-center"
-                >
-                  <span className="font-bold font-sans text-white mr-2">
-                    انشاء ملف جديد
-                  </span>
-                  <AiOutlinePlusCircle color="white" />
-                </button>
-              </div>
+                <AiOutlinePlusCircle color="white" />
+              </button>
             </div>
           </div>
         </div>
