@@ -1,7 +1,7 @@
 import Login from "./routes/login";
 // eslint-disable-next-line
 import styles from "./index.css";
-import { Dashboard } from "./components/dashboard";
+import { Dashboard } from "./routes/dashboard";
 import { Toaster } from "react-hot-toast";
 
 function App() {

@@ -5,12 +5,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./routes/login";
 import ErrorPage from "./error-page";
 import { HelmetProvider } from "react-helmet-async";
-import { Dashboard } from "./components/dashboard";
+import { Dashboard } from "./routes/dashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Login />,
     errorElement: <ErrorPage />,
   },
   {
